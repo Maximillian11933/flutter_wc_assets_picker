@@ -4,9 +4,9 @@
 
 import 'dart:io';
 
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../delegates/asset_picker_viewer_builder_delegate.dart';
 import '../../internal/methods.dart';
@@ -39,8 +39,8 @@ class VideoPageBuilder extends StatefulWidget {
 class _VideoPageBuilderState extends State<VideoPageBuilder> {
   /// Controller for the video player.
   /// 视频播放的控制器
-  VideoPlayerController get controller => _controller!;
-  VideoPlayerController? _controller;
+  CachedVideoPlayerController get controller => _controller!;
+  CachedVideoPlayerController? _controller;
 
   /// Whether the controller has initialized.
   /// 控制器是否已初始化
@@ -85,11 +85,11 @@ class _VideoPageBuilderState extends State<VideoPageBuilder> {
       }
       return;
     }
-    if (Platform.isAndroid) {
-      _controller = VideoPlayerController.contentUri(Uri.parse(url));
-    } else {
-      _controller = VideoPlayerController.network(url);
-    }
+    // if (Platform.isAndroid) {
+    //   _controller = CachedVideoPlayerController.contentUri(Uri.parse(url));
+    // } else {
+      _controller = CachedVideoPlayerController.network(url);
+    // }
     try {
       await controller.initialize();
       hasLoaded = true;
@@ -148,7 +148,7 @@ class _VideoPageBuilderState extends State<VideoPageBuilder> {
           child: Center(
             child: AspectRatio(
               aspectRatio: controller.value.aspectRatio,
-              child: VideoPlayer(controller),
+              child: CachedVideoPlayer(controller),
             ),
           ),
         ),

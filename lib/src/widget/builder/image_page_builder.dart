@@ -4,11 +4,11 @@
 
 import 'dart:io';
 
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../delegates/asset_picker_viewer_builder_delegate.dart';
 import 'locally_available_builder.dart';
@@ -35,7 +35,7 @@ class ImagePageBuilder extends StatefulWidget {
 
 class _ImagePageBuilderState extends State<ImagePageBuilder> {
   bool _isLocallyAvailable = false;
-  VideoPlayerController? _controller;
+  CachedVideoPlayerController? _controller;
 
   bool get _isOriginal => widget.previewThumbnailSize == null;
 
@@ -57,7 +57,7 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
     if (!mounted || file == null) {
       return;
     }
-    final VideoPlayerController c = VideoPlayerController.file(
+    final CachedVideoPlayerController c = CachedVideoPlayerController.file(
       file,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
@@ -123,15 +123,15 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
           Center(
             child: AspectRatio(
               aspectRatio: _controller!.value.aspectRatio,
-              child: ValueListenableBuilder<VideoPlayerValue>(
+              child: ValueListenableBuilder<CachedVideoPlayerValue>(
                 valueListenable: _controller!,
-                builder: (_, VideoPlayerValue value, Widget? child) {
+                builder: (_, CachedVideoPlayerValue value, Widget? child) {
                   return Opacity(
                     opacity: value.isPlaying ? 1 : 0,
                     child: child,
                   );
                 },
-                child: VideoPlayer(_controller!),
+                child: CachedVideoPlayer(_controller!),
               ),
             ),
           ),
@@ -139,9 +139,9 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
           Positioned.fill(child: _imageBuilder(context, asset))
         else
           Positioned.fill(
-            child: ValueListenableBuilder<VideoPlayerValue>(
+            child: ValueListenableBuilder<CachedVideoPlayerValue>(
               valueListenable: _controller!,
-              builder: (_, VideoPlayerValue value, Widget? child) {
+              builder: (_, CachedVideoPlayerValue value, Widget? child) {
                 return Opacity(
                   opacity: value.isPlaying ? 0 : 1,
                   child: child,

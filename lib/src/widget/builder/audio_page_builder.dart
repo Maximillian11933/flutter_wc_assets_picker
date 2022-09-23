@@ -4,9 +4,9 @@
 
 import 'dart:async';
 
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../constants/extensions.dart';
 import '../../internal/methods.dart';
@@ -32,7 +32,7 @@ class _AudioPageBuilderState extends State<AudioPageBuilder> {
 
   /// Create a [VideoPlayerController] instance for the page builder state.
   /// 创建一个 [VideoPlayerController] 的实例
-  late final VideoPlayerController _controller;
+  late final CachedVideoPlayerController _controller;
 
   /// Whether the audio loaded.
   /// 音频是否已经加载完成
@@ -73,7 +73,7 @@ class _AudioPageBuilderState extends State<AudioPageBuilder> {
     try {
       final String? url = await widget.asset.getMediaUrl();
       assetDuration = Duration(seconds: widget.asset.duration);
-      _controller = VideoPlayerController.network(url!);
+      _controller = CachedVideoPlayerController.network(url!);
       await _controller.initialize();
       _controller.addListener(audioPlayerListener);
     } catch (e) {
